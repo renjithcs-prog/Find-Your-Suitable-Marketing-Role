@@ -24,16 +24,38 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onComplete, utmParams })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !phone.trim()) {
-        setError('Please fill in all fields');
+    
+    if (!name.trim()) {
+        setError('Please enter your full name');
         return;
     }
     
-    // Basic phone validation (at least 10 digits)
-    const phoneRegex = /^[0-9]{10,}$/;
-    if (!phoneRegex.test(phone.replace(/\D/g, ''))) {
-        setError('Please enter a valid phone number');
+    // Strict Phone Validation
+    const cleanedPhone = phone.replace(/\D/g, '');
+
+    // 1. Check Length (Must be 10 digits for Indian mobile numbers)
+    if (cleanedPhone.length !== 10) {
+        setError('Please enter a valid 10-digit mobile number');
         return;
+    }
+
+    // 2. Check first digit (Cannot start with 0)
+    if (cleanedPhone.startsWith('0')) {
+        setError('Phone number cannot start with 0');
+        return;
+    }
+
+    // 3. Check for obvious dummy numbers
+    // Check if all digits are the same (e.g., 9999999999)
+    if (/^(\d)\1+$/.test(cleanedPhone)) {
+        setError('Please enter a valid mobile number');
+        return;
+    }
+
+    // Check for sequential patterns
+    if (cleanedPhone === '1234567890' || cleanedPhone === '9876543210') {
+         setError('Please enter a valid mobile number');
+         return;
     }
 
     setIsSubmitting(true);
@@ -42,7 +64,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onComplete, utmParams })
     // Merge user input with UTM parameters
     const submissionData = { 
       name, 
-      phone, 
+      phone: cleanedPhone, // Send the cleaned 10-digit number
       language,
       ...utmParams
     };
@@ -51,7 +73,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onComplete, utmParams })
     await submitToGoogleSheet(submissionData);
 
     setIsSubmitting(false);
-    onComplete({ name, phone, language });
+    onComplete({ name, phone: cleanedPhone, language });
   };
 
   return (
@@ -63,7 +85,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onComplete, utmParams })
             </div>
             <h2 className="text-3xl font-black text-white leading-tight">Your Career Path is Ready!</h2>
             <p className="text-gray-400 max-w-[90%] mx-auto font-medium leading-relaxed">
-              Unlock your personalized Career Blueprint: Your <span className="text-yellow-400 font-black tracking-wide uppercase">Perfect Role</span>, <span className="text-yellow-400 font-black tracking-wide uppercase">Salary Potential</span> & The <span className="text-yellow-400 font-black tracking-wide uppercase">AI Tools</span> You Need To Master.
+              Unlock your personalized Career Blueprint: Your <span className="text-yellow-400 font-black tracking-wide uppercase">Perfect Role</span>, <span className="text-yellow-400 font-black tracking-wide uppercase">Salary Potential</span> & The <span className="text-yellow-400 font-black tracking-wide uppercase">TOOLS</span> You Need To Master.
             </p>
         </div>
 
@@ -90,9 +112,16 @@ export const SignupForm: React.FC<SignupFormProps> = ({ onComplete, utmParams })
                     <input 
                         type="tel" 
                         value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
+                        onChange={(e) => {
+                            // Only allow digits to be typed
+                            const val = e.target.value;
+                            if (val === '' || /^[0-9]+$/.test(val)) {
+                                setPhone(val);
+                            }
+                        }}
+                        maxLength={10}
                         className="w-full bg-gray-900 border border-gray-700 focus:border-yellow-400 rounded-xl py-4 pl-12 pr-4 text-white placeholder-gray-600 outline-none transition-all"
-                        placeholder="Enter your mobile number"
+                        placeholder="Enter 10-digit mobile number"
                         disabled={isSubmitting}
                     />
                 </div>

@@ -83,7 +83,7 @@ export const ResultPage: React.FC<ResultPageProps> = ({ role, onRetake }) => {
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-pink-500"></div>
                     <div className="flex items-center gap-2 mb-4">
                         <Wrench className="text-purple-400" size={20} />
-                        <h3 className="font-bold text-white">AI Tools to Master</h3>
+                        <h3 className="font-bold text-white">Tools to Master</h3>
                     </div>
                     
                     <div className="flex flex-wrap gap-2">
