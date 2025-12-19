@@ -17,8 +17,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
       {/* Header */}
       <div className="p-6 pt-8 z-10 flex justify-between items-center shrink-0">
         <div className="flex items-center gap-2">
-           <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-blue-800 font-extrabold text-xl shadow-lg">E</div>
-           <span className="font-bold text-2xl tracking-tight drop-shadow-md">entri</span>
+           <div className="bg-white p-2 px-3 rounded-lg shadow-xl flex items-center justify-center h-10 md:h-12 border border-white/20">
+              <img 
+                src="logo.png" 
+                alt="Entri Logo" 
+                className="h-full w-auto object-contain"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                  const parent = e.currentTarget.parentElement;
+                  if (parent) {
+                    parent.innerHTML = '<div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-black shadow-inner">E</div><span class="ml-2 font-bold text-blue-900 text-xl tracking-tighter">entri</span>';
+                  }
+                }}
+              />
+           </div>
         </div>
       </div>
 
@@ -46,16 +58,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
         </div>
 
         {/* Bottom Section */}
-        <div className="pb-8 pt-6 space-y-6 w-full max-w-lg mx-auto shrink-0">
+        <div className="pb-12 pt-6 w-full max-w-lg mx-auto shrink-0">
             <Button fullWidth onClick={onStart} className="!bg-yellow-400 !text-black !font-black !text-xl !py-5 !rounded-xl shadow-2xl hover:!scale-[1.02] active:!scale-95 flex items-center justify-center gap-2 border-none uppercase tracking-wide">
                 Find My Perfect Role
             </Button>
-            
-            <div className="text-center">
-                <button className="text-xs text-blue-200/80 font-medium underline hover:text-white transition-colors">
-                    Learn in Malayalam
-                </button>
-            </div>
         </div>
       </div>
     </div>

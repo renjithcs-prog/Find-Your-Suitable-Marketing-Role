@@ -59,13 +59,23 @@ const App: React.FC = () => {
       )}
 
       {screen === ScreenState.CALCULATING && (
-        <div className="flex flex-col items-center justify-center h-screen space-y-6">
+        <div className="flex flex-col items-center justify-center h-screen space-y-8 p-6">
+           <div className="bg-white p-3 rounded-xl shadow-[0_0_30px_rgba(255,255,255,0.1)] animate-pulse mb-4">
+              <img 
+                src="logo.png" 
+                alt="Entri" 
+                className="h-10 w-auto object-contain" 
+                onError={(e) => e.currentTarget.style.display = 'none'} 
+              />
+           </div>
            <div className="relative">
-             <div className="absolute inset-0 bg-blue-500 blur-xl opacity-20 rounded-full animate-pulse"></div>
+             <div className="absolute inset-0 bg-blue-500 blur-2xl opacity-20 rounded-full animate-pulse"></div>
              <Loader2 size={64} className="text-blue-500 animate-spin relative z-10" />
            </div>
-           <h2 className="text-2xl font-black text-white animate-pulse">Analyzing your profile...</h2>
-           <p className="text-gray-500">Matching with 5 marketing archetypes</p>
+           <div className="text-center space-y-3">
+             <h2 className="text-2xl font-black text-white">Analyzing your profile...</h2>
+             <p className="text-gray-500 font-medium">Matching with 5 marketing archetypes</p>
+           </div>
         </div>
       )}
 
